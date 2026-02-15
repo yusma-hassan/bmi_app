@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SizedBox(height: 10,),
           Text(
-            "Category: ${category}",
+            "Category: yusma${category}",
             style: TextStyle(fontSize: 20),
           ),
         ],
