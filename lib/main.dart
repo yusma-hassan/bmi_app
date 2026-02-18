@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bmi_app/splashPage.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  Splashpage(),
+      home: Splashpage(),
     );
   }
 }
@@ -38,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var inchesController = TextEditingController();
 
   double BMI = 0.0;
-  var category = "-";
+  var category = " ";
+  var result = " ";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,63 +138,92 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             height: 10,
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo.shade100,
-              elevation: 5,
-            ),
-            onPressed: () {
-              var feet = int.parse(feetController.text);
-              var inches = int.parse(inchesController.text);
-              double weight = double.parse(weightController.text);
-              var heightInMeters = (feet * 0.3048) + (inches * 0.0254);
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 11.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo.shade100,
+                    elevation: 5,
+                  ),
+                  onPressed: () {
+                    if (weightController.text.isEmpty ||
+                        feetController.text.isEmpty ||
+                        inchesController.text.isEmpty) {
+                      setState(() {
+                        result = "Please enter all the required fields";
+                      });
 
-              if (heightInMeters == 0 || weight == 0) {
-                BMI = 0;
-              } else {
-                BMI = weight / (heightInMeters * heightInMeters);
-              }
-              if(BMI  < 18.5){
-                  category = "Underweight";
-              }
-              else if(BMI>= 18.5 && BMI <= 24.9){
-                category = "Normal";
-              }
-              else if(BMI >= 25 && BMI <=29.9){
-                category = "Overweight";
-              }
-              else{
-                category = "Obesity";
-              }
+                      return; // stop here
+                    }
 
-              print(weightController.text);
-              print(feetController.text);
-              print(inchesController.text);
-              print(BMI);
+                    var feet = int.parse(feetController.text);
+                    var inches = int.parse(inchesController.text);
+                    var weight = int.parse(weightController.text);
+                    var heightInMeters = (feet * 0.3048) + (inches * 0.0254);
 
-              setState(() {});
-            },
-            child: Text(
-              "Calculate BMI",
-              style: TextStyle(fontSize: 25, color: Colors.indigo),
-            ),
+                    if (weight <= 0 || heightInMeters <= 0) {
+                      setState(() {
+                        result = "0.0";
+                      });
+                      return;
+                    }
+
+                    if (BMI < 18.5) {
+                      category = "Underweight";
+                    } else if (BMI >= 18.5 && BMI <= 24.9) {
+                      category = "Normal";
+                    } else if (BMI >= 25 && BMI <= 29.9) {
+                      category = "Overweight";
+                    } else {
+                      category = "Obesity";
+                    }
+
+                    BMI = weight / (heightInMeters * heightInMeters);
+                    setState(() {
+                      result =
+                          "Your BMI is: ${BMI.toStringAsFixed(4)}\n Category: ${category}";
+                    });
+
+                    print(weightController.text);
+                    print(feetController.text);
+                    print(inchesController.text);
+                    print(BMI);
+                  },
+                  child: Text(
+                    "Calculate",
+                    style: TextStyle(fontSize: 25, color: Colors.indigo),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo.shade100, elevation: 5),
+                  onPressed: () {
+                    setState(() {
+                      weightController.clear();
+                      inchesController.clear();
+                      feetController.clear();
+                      BMI = 0.0;
+                      category = "";
+                      result = "";
+                    });
+                  },
+                  child: Text(
+                    "Clear",
+                    style: TextStyle(color: Colors.indigo, fontSize: 25),
+                  ))
+            ],
           ),
           SizedBox(
             height: 10,
           ),
-          Text(
-            "Your BMI is:",
-            style: TextStyle(fontSize: 20),
-          ),
-          Text(
-            "${BMI}",
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 10,),
-          Text(
-            "Category: yusma${category}",
-            style: TextStyle(fontSize: 20),
-          ),
+          Text(result, style: TextStyle(fontSize: 20)),
         ],
       ),
     );
