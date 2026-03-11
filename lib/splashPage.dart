@@ -29,7 +29,7 @@ class _SplashpageState extends State<Splashpage> {
     body: Container(
       width: double.infinity,
       height: double.infinity,
-     color: Colors.indigo,
+     color:Color(0xFF162660),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -37,11 +37,11 @@ class _SplashpageState extends State<Splashpage> {
             child: Container(
               width: 200,
               height: 200,
-              child: Image.asset("assets/images/bmi.jpeg",
+              child: Image.asset("assets/images/Icon.jpeg",
               )
               ),
           ),
-          Text("Your BMI",style: TextStyle(fontSize: 40,color: Colors.white, ),)
+          Text("Your BMI",style: TextStyle(fontSize: 40,color: Color(0xFFF1E4D1), ),)
         ],
       ),
       
